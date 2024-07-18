@@ -1,1 +1,8 @@
-# BitCalculator
+# 비트연산자를 이용한 계산기
+
+- MSB: 부호비트
+- 32bit 정수형 기준
+
+## 반가산기(half adder)
+
+
