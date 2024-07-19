@@ -5,7 +5,7 @@
 #include <string.h>
 #include "Adder.h"
 
-#define BIT_EXT(num, mask) num & mask
+#define BIT_EXT(num, mask) ((num & mask) != 0)
 #define COMP(num) (add(~num, 1))
 
 void printBit(int num);
