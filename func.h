@@ -70,6 +70,8 @@ int sub(int num1, int num2) {
 }
 
 int mul(int num1, int num2) {
+	printf("c res: %d\n", num1 * num2);
+
 	int res = 0;
 	int sign = 1;
 
@@ -92,7 +94,7 @@ int mul(int num1, int num2) {
 }
 
 int div2(int num1, int num2) {
-	//printf("c res: %d %d\n", num1 / num2, num1 % num2);
+	printf("c res: %d %d\n", num1 / num2, num1 % num2);
 
 	int res = 0;
 	bool flag = 0;
