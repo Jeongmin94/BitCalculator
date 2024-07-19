@@ -92,7 +92,7 @@ int mul(int num1, int num2) {
 }
 
 int div2(int num1, int num2) {
-	printf("c res: %d %d\n", num1 / num2, num1 % num2);
+	//printf("c res: %d %d\n", num1 / num2, num1 % num2);
 
 	int res = 0;
 	bool flag = 0;
@@ -120,7 +120,7 @@ int div2(int num1, int num2) {
 	}
 
 	int remainder = num1;
-	if (floor) {
+	if (floor && remainder != 0) {
 		res = add(res, 1);
 		remainder = sub(num2, remainder);
 	}
