@@ -62,17 +62,17 @@ int main()
 		{
 		case '+':
 		{
-			printf("%d\n", add(num1, num2));
+			printf("%d\n\n", add(num1, num2));
 		}
 		break;
 		case '-':
 		{
-			printf("%d\n", sub(num1, num2));
+			printf("%d\n\n", sub(num1, num2));
 		}
 		break;
 		case '*':
 		{
-			printf("%d\n", mul(num1, num2));
+			printf("%d\n\n", mul(num1, num2));
 		}
 		break;
 		case '/':

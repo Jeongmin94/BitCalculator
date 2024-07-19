@@ -92,12 +92,16 @@ int mul(int num1, int num2) {
 }
 
 int div2(int num1, int num2) {
+	printf("c res: %d %d\n", num1 / num2, num1 % num2);
+
 	int res = 0;
 	bool flag = 0;
+	bool floor = 0;
 
 	if (num1 < 0) {
 		num1 = add(~num1, 1);
 		flag ^= 1;
+		floor = 1;
 	}
 
 	if (num2 < 0) {
@@ -109,18 +113,23 @@ int div2(int num1, int num2) {
 		int val = num2 << i;
 		if (val <= 0) continue;
 
-		if (num1 >= (num2 << i)) {
-			num1 = sub(num1, (num2 << i));
+		if (num1 >= val) {
+			num1 = sub(num1, val);
 			res = add(res, (1 << i));
 		}
 	}
 
-	if (flag) {
-		res = add(~res, 1);
-		num1 = add(~num1, 1);
+	int remainder = num1;
+	if (floor) {
+		res = add(res, 1);
+		remainder = sub(num2, remainder);
 	}
 
-	printf("¸ò: %d, ³ª¸ÓÁö: %d\n", res, num1);
+	if (flag) {
+		res = add(~res, 1);
+	}
+
+	printf("¸ò: %d, ³ª¸ÓÁö: %d\n\n", res, remainder);
 
 	return res;
 }
