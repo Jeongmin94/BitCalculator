@@ -11,7 +11,7 @@ typedef struct _bigint {
 	int* data;
 } BigInt;
 
-BigInt* createBigInt();
+BigInt* createBigInt(int size);
 void deleteBigInt(BigInt* bi);
 void printBigIntBinary(const BigInt* bi);
 
@@ -25,17 +25,18 @@ BigInt* bi_comp(BigInt* bi);
 
 // 테스트 및 문자열 <-> 숫자 변환의 용이성을 위해 64bit으로 제한
 // !TODO: 64bit를 넘는 범위의 큰 정수에 대한 변환 추가 필요
-BigInt* createBigInt() {
+BigInt* createBigInt(int size) {
 	BigInt* bi = (BigInt*)malloc(sizeof(BigInt));
 
 	if (bi == NULL) return NULL;
 
-	bi->size = 2; // 4byte * 2 = 8byte
+	bi->size = size; // 4byte * 2 = 8byte
 	bi->data = (int*)malloc(sizeof(int) * bi->size);
 	memset(bi->data, 0, sizeof(int) * bi->size);
 
 	return bi;
 }
+
 void deleteBigInt(BigInt* bi) {
 	free(bi->data);
 	free(bi);
@@ -74,7 +75,8 @@ void printBigIntBinary(const BigInt* bi) {
 }
 
 BigInt* toBigInt(const char* num) {
-	BigInt* bi = createBigInt();
+	// !TODO
+	BigInt* bi = createBigInt(2);
 
 	int idx = 0;
 	bool bit[64];
@@ -130,7 +132,7 @@ BigInt* bi_add(const BigInt* bi1, const BigInt* bi2) {
 
 	int sz = (bi1->size > bi2->size) ? bi1->size : bi2->size;
 
-	BigInt* nb = createBigInt();
+	BigInt* nb = createBigInt(sz);
 	//nb->size = sz;
 	//nb->data = (int*)malloc(sizeof(int) * sz);
 
