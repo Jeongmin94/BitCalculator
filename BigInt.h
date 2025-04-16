@@ -6,48 +6,55 @@
 #include "Adder.h"
 #include "func.h"
 
-typedef struct _bigint {
+typedef struct _bigint
+{
 	int size;
-	int* data;
+	int *data;
 } BigInt;
 
-BigInt* createBigInt(int size);
-void deleteBigInt(BigInt* bi);
-void printBigIntBinary(const BigInt* bi);
+BigInt *createBigInt(int size);
+void deleteBigInt(BigInt *bi);
+void printBigIntBinary(const BigInt *bi);
 
-BigInt* toBigInt(const char* num);
-long long toLLInt(const BigInt* bi);
+BigInt *toBigInt(const char *num);
+long long toLLInt(const BigInt *bi);
 
 // add, sub
-BigInt* bi_add(const BigInt* bi1, const BigInt* bi2);
-BigInt* bi_sub(const BigInt* bi1, const BigInt* bi2);
-BigInt* bi_comp(BigInt* bi);
+BigInt *bi_add(const BigInt *bi1, const BigInt *bi2);
+BigInt *bi_sub(const BigInt *bi1, const BigInt *bi2);
+BigInt *bi_comp(const BigInt *bi);
 
-// 테스트 및 문자열 <-> 숫자 변환의 용이성을 위해 64bit으로 제한
-// !TODO: 64bit를 넘는 범위의 큰 정수에 대한 변환 추가 필요
-BigInt* createBigInt(int size) {
-	BigInt* bi = (BigInt*)malloc(sizeof(BigInt));
+// For testing, string <-> number conversion is limited to 64bit
+// !TODO: Need to add conversion for numbers larger than 64bit
+BigInt *createBigInt(int size)
+{
+	BigInt *bi = (BigInt *)malloc(sizeof(BigInt));
 
-	if (bi == NULL) return NULL;
+	if (bi == NULL)
+		return NULL;
 
 	bi->size = size; // 4byte * 2 = 8byte
-	bi->data = (int*)malloc(sizeof(int) * bi->size);
+	bi->data = (int *)malloc(sizeof(int) * bi->size);
 	memset(bi->data, 0, sizeof(int) * bi->size);
 
 	return bi;
 }
 
-void deleteBigInt(BigInt* bi) {
+void deleteBigInt(BigInt *bi)
+{
 	free(bi->data);
 	free(bi);
 }
 
-void printBigInt(const BigInt* bi) {
+void printBigInt(const BigInt *bi)
+{
 	long long sum = 0;
 
 	int count = 0;
-	for (int i = 0; i < bi->size; i++) {
-		for (int j = 0; j < 32; j++) {
+	for (int i = 0; i < bi->size; i++)
+	{
+		for (int j = 0; j < 32; j++)
+		{
 			long long mask = (1LL << count);
 
 			sum += (bi->data[i] & mask);
@@ -58,15 +65,20 @@ void printBigInt(const BigInt* bi) {
 	printf("%lld\n", sum);
 }
 
-void printBigIntBinary(const BigInt* bi) {
-	for (int i = bi->size - 1; i >= 0; i--) {
-		for (int j = 31; j >= 0; j--) {
+void printBigIntBinary(const BigInt *bi)
+{
+	for (int i = bi->size - 1; i >= 0; i--)
+	{
+		for (int j = 31; j >= 0; j--)
+		{
 			int mask = (1 << j);
 
-			if (BIT_EXT(bi->data[i], mask) != 0) {
+			if (BIT_EXT(bi->data[i], mask) != 0)
+			{
 				printf("%d", 1);
 			}
-			else {
+			else
+			{
 				printf("%d", 0);
 			}
 		}
@@ -74,36 +86,38 @@ void printBigIntBinary(const BigInt* bi) {
 	printf("\n");
 }
 
-BigInt* toBigInt(const char* num) {
+BigInt *toBigInt(const char *num)
+{
 	// !TODO
-	BigInt* bi = createBigInt(2);
+	BigInt *bi = createBigInt(2);
 
 	int idx = 0;
 	bool bit[64];
 	memset(bit, 0, sizeof(bit));
 
 	long long n = atoll(num);
-	for (int i = 0; i < 64; i++) {
+	for (int i = 0; i < 64; i++)
+	{
 		long long mask = (1LL << i);
 
 		bit[i] = BIT_EXT(n, mask);
 	}
-	//for (int i = 63; i >= 0; i--) {
+	// for (int i = 63; i >= 0; i--) {
 	//	printf("%d", bit[i]);
-	//}
-	//printf("\n");
+	// }
+	// printf("\n");
 
 	idx = 63;
 	int count = 0;
 	int bIdx = bi->size - 1;
-	while (idx >= 0) {
-		int mask = (1 << idx);
-
+	while (idx >= 0)
+	{
 		bi->data[bIdx] = (bi->data[bIdx] | (bit[idx] << idx));
 
 		idx--;
 		count++;
-		if (count % 32 == 0) {
+		if (count % 32 == 0)
+		{
 			bIdx--;
 			count = 0;
 		}
@@ -112,12 +126,15 @@ BigInt* toBigInt(const char* num) {
 	return bi;
 }
 
-long long toLLInt(const BigInt* bi) {
+long long toLLInt(const BigInt *bi)
+{
 	long long sum = 0;
 	int count = 0;
 
-	for (int i = 0; i < bi->size; i++) {
-		for (int j = 0; j < 32; j++) {
+	for (int i = 0; i < bi->size; i++)
+	{
+		for (int j = 0; j < 32; j++)
+		{
 			long long mask = (1LL << count);
 
 			sum += (bi->data[i] & mask);
@@ -127,19 +144,23 @@ long long toLLInt(const BigInt* bi) {
 	return sum;
 }
 
-BigInt* bi_add(const BigInt* bi1, const BigInt* bi2) {
-	if (bi1 == NULL || bi2 == NULL) return NULL;
+BigInt *bi_add(const BigInt *bi1, const BigInt *bi2)
+{
+	if (bi1 == NULL || bi2 == NULL)
+		return NULL;
 
 	int sz = (bi1->size > bi2->size) ? bi1->size : bi2->size;
 
-	BigInt* nb = createBigInt(sz);
-	//nb->size = sz;
-	//nb->data = (int*)malloc(sizeof(int) * sz);
+	BigInt *nb = createBigInt(sz);
+	// nb->size = sz;
+	// nb->data = (int*)malloc(sizeof(int) * sz);
 
 	bool c = 0;
-	for (int i = 0; i < sz; i++) {
+	for (int i = 0; i < sz; i++)
+	{
 
-		for (int j = 0; j < 32; j++) {
+		for (int j = 0; j < 32; j++)
+		{
 			int mask = (1 << j);
 
 			bool carry = 0;
@@ -156,20 +177,23 @@ BigInt* bi_add(const BigInt* bi1, const BigInt* bi2) {
 	return nb;
 }
 
-BigInt* bi_sub(const BigInt* bi1, const BigInt* bi2) {
-	BigInt* comp = bi_comp(bi2);
-	BigInt* ret = bi_add(bi1, comp);
+BigInt *bi_sub(const BigInt *bi1, const BigInt *bi2)
+{
+	BigInt *comp = bi_comp(bi2);
+	BigInt *ret = bi_add(bi1, comp);
 
 	deleteBigInt(comp);
 	return ret;
 }
 
-BigInt* bi_comp(BigInt* bi) {
-	for (int i = 0; i < bi->size; i++) {
+BigInt *bi_comp(const BigInt *bi)
+{
+	for (int i = 0; i < bi->size; i++)
+	{
 		bi->data[i] = ~bi->data[i];
 	}
-	BigInt* one = toBigInt("1");
-	BigInt* ret = bi_add(bi, one);
+	BigInt *one = toBigInt("1");
+	BigInt *ret = bi_add(bi, one);
 
 	deleteBigInt(one);
 	return ret;
